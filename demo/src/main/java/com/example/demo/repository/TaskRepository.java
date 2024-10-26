@@ -1,12 +1,12 @@
-// package com.example.demo.repository;
+package com.example.demo.repository;
 
-// import org.springframework.data.jpa.repository.JpaRepository;
-// import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-// import com.example.demo.entity.Task;
+import com.example.demo.entity.Task;
 
 
-// @Repository
-// public interface TaskRepository extends JpaRepository<Task, Long> {
-//     //custom queries can be defined here
-// }
+@Repository
+public interface TaskRepository extends JpaRepository<Task, Long> {
+    //custom queries can be defined here
+}
