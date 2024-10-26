@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import OrderType from "../../type/OrderType";
 
 
@@ -21,9 +22,9 @@ function Order() {
     },[])
     return (
         <div className="container mx-auto py-5">
-            <h1 className="text-5xl font-bold mb-8 text-center text-gray-700">Order</h1>
+            <h1 className="text-5xl font-bold mb-8 text-center text-gray-700 p-6">Order</h1>
             <div>
-                <link to="/orders/Createrder" rel="stylesheet" href="" />
+            <Link to="/orders/CreateOrder" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Create Order</Link>
                 <table className="min-w-full border border-gray-300 bg-white shadow-lg">
                     <thead className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                         <tr>
