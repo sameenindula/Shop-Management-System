@@ -5,13 +5,12 @@ import { useAuth } from "../../context/AuthContext";
 import ProductType from "../../type/ProductType";
 
 function CreateOrder() {
-    const {isAuthenticated,jwtToken}=useAuth();
+    const { isAuthenticated, jwtToken } = useAuth();
 
     const [products, setProducts] = useState<ProductType[]>([]);
     const [orderProducts, setOrderProducts] = useState<ProductType[]>([]);
     const [total, setTotal] = useState<number>(0);
     const orderRef = useRef<HTMLDivElement | null>(null); // Ref for the order container
-
 
     const config = {
         headers: {
@@ -19,24 +18,21 @@ function CreateOrder() {
         }
     };
 
-    useEffect(function () {
-
+    useEffect(() => {
         if (isAuthenticated) {
             loadProducts();
         }
-    }, [isAuthenticated])
-
+    }, [isAuthenticated]);
 
     // Load products from the API
     async function loadProducts() {
         try {
-            const response = await axios.get("http://localhost:8080/products",config);
+            const response = await axios.get("http://localhost:8080/products", config);
             setProducts(response.data);
         } catch (error) {
             console.log(error);
         }
     }
-
 
     // Add product to the order and update the total
     function addProductToOrder(product: ProductType) {
@@ -49,31 +45,27 @@ function CreateOrder() {
             orderRef.current.scrollTop = orderRef.current.scrollHeight;
         }
     }
-    const navigate=useNavigate();
 
-    async function saveOrder(){
-        var productIds:any=[];
+    const navigate = useNavigate();
 
-        orderProducts.map(function(product){
-            productIds.push(product.id);
-        })
+    async function saveOrder() {
+        const productIds = orderProducts.map(product => product.id);
         try {
-            await axios.post("http://localhost:8080/orders",{productIds:productIds},config);
-
+            await axios.post("http://localhost:8080/orders", { productIds }, config);
             navigate("/order");
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
     }
 
     return (
         <div className="flex h-screen bg-gray-100 text-gray-800">
             {/* Sidebar for Products List */}
-            <div className="w-[350px] border-r border-gray-300 p-6 bg-white shadow-md">
-                <h2 className="text-2xl font-bold text-gray-700 mb-6">Products</h2>
+            <div className="w-[350px] border-r border-gray-300 p-6 bg-gradient-to-br from-blue-500 to-purple-600 shadow-lg">
+                <h2 className="text-2xl font-bold text-white mb-6">Products</h2>
 
                 {/* Scrollable box for product list */}
-                <div className="h-[500px] overflow-y-auto border border-gray-200 rounded-lg shadow-inner bg-gray-50 p-4">
+                <div className="h-[500px] overflow-y-auto border border-gray-300 rounded-lg shadow-inner bg-white p-4">
                     <div className="space-y-4">
                         {products.map((product) => (
                             <div
@@ -91,20 +83,17 @@ function CreateOrder() {
             </div>
 
             {/* New Order Section */}
-            <div className="p-8 flex-1 bg-white shadow-md">
+            <div className="p-8 flex-1 bg-white shadow-lg rounded-lg">
                 <h2 className="text-2xl font-bold text-gray-700 mb-6">New Order</h2>
                 
                 <p className="text-gray-600 mb-6">Select products from the left to add them to your new order.</p>
 
                 {/* Scrollable box for the order list */}
-                <div className="border border-gray-200 rounded-lg shadow-inner bg-gray-50">
-                    <div
-                        ref={orderRef}
-                        className="h-[500px] overflow-y-auto p-0"
-                    >
+                <div className="border border-gray-300 rounded-lg shadow-inner bg-gray-50">
+                    <div ref={orderRef} className="h-[500px] overflow-y-auto p-0">
                         <table className="w-full text-left text-gray-700 border-separate border-spacing-0">
-                            <thead className="bg-gray-200 sticky top-0 z-10">
-                                <tr className="text-gray-500">
+                            <thead className="bg-gradient-to-r from-blue-600 to-purple-600 text-white sticky top-0 z-10">
+                                <tr>
                                     <th className="py-3 px-4">ID</th>
                                     <th className="py-3 px-4">Description</th>
                                     <th className="py-3 px-4 text-right">Price</th>
@@ -112,7 +101,7 @@ function CreateOrder() {
                             </thead>
                             <tbody>
                                 {orderProducts.map((product, index) => (
-                                    <tr key={`${product.id}-${index}`} className="hover:bg-gray-50 transition duration-300">
+                                    <tr key={`${product.id}-${index}`} className="hover:bg-gray-100 transition duration-300">
                                         <td className="border-b py-3 px-4">{product.id}</td>
                                         <td className="border-b py-3 px-4">{product.name}</td>
                                         <td className="border-b py-3 px-4 text-right">${product.price.toFixed(2)}</td>
@@ -138,8 +127,9 @@ function CreateOrder() {
                         </table>
                     </div>
                 </div>
-                <button  onClick={saveOrder} className="bg-red-500 text-white px-3 py-1 rounded-md ml-2 hover:bg-red-600">Place Order</button>
-
+                <button onClick={saveOrder} className="mt-4 bg-gradient-to-r from-red-500 to-red-700 text-white px-4 py-2 rounded-full hover:bg-red-600 transition duration-300 transform hover:scale-105 shadow-lg">
+                    Place Order
+                </button>
             </div>
         </div>
     );

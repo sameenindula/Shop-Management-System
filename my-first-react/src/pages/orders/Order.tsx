@@ -4,11 +4,9 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import OrderType from "../../type/OrderType";
 
-
 function Order() {
-
-    const [orders,setOrders]= useState<OrderType[]>([]);
-    const {isAuthenticated,jwtToken}=useAuth();
+    const [orders, setOrders] = useState<OrderType[]>([]);
+    const { isAuthenticated, jwtToken } = useAuth();
 
     const config = {
         headers: {
@@ -16,57 +14,61 @@ function Order() {
         }
     };
 
-    useEffect(function () {
-
+    useEffect(() => {
         if (isAuthenticated) {
             loadOrders();
         }
-    }, [isAuthenticated])
+    }, [isAuthenticated]);
 
-
-    async function loadOrders(){
+    async function loadOrders() {
         try {
-            const response= await axios.get("http://localhost:8080/orders",config)
+            const response = await axios.get("http://localhost:8080/orders", config);
             setOrders(response.data);
         } catch (error) {
             console.log(error);
         }
     }
 
-    
     return (
-        <div className="container mx-auto py-5">
-            <h1 className="text-5xl font-bold mb-8 text-center text-gray-700 p-6">Order</h1>
-            <div>
-            <Link to="/orders/CreateOrder" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Create Order</Link>
-                <table className="min-w-full border border-gray-300 bg-white shadow-lg">
-                    <thead className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                        <tr>
-                            <th className="py-3 px-6 text-left">Order ID</th>
-                            <th className="py-3 px-6 text-left">Order Date and Time</th>
-                            <th className="py-3 px-6 text-left">Total Amount</th>
-                            <th className="py-3 px-6 text-left">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="text-gray-600 text-sm font-light">
-                        {orders.map((order) => (
-                            <tr key={order.id} className="border-b border-gray-200 hover:bg-gray-100">
-                                <td className="py-3 px-6 text-left">{order.id}</td>
-                                <td className="py-3 px-6 text-left">{order.orderDateTime.toLocaleString()}</td>
-                                <td className="py-3 px-6 text-left">{order.totalPrice}</td>
-                                <td className="py-3 px-6 text-left">
-                                    <button  className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600">
-                                        Edit
-                                    </button>
-                                    <button  className="bg-red-500 text-white px-3 py-1 rounded-md ml-2 hover:bg-red-600">
-                                        Delete
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+        <div className="container mx-auto py-10">
+            <h1 className="text-6xl font-bold mb-10 text-center text-blue-700 p-4 rounded-lg bg-gradient-to-r from-blue-200 to-purple-3 00 shadow-lg">
+                Orders
+            </h1>
+            <div className="flex justify-end mb-6">
+                <Link
+                    to="/orders/CreateOrder"
+                    className="bg-gradient-to-r from-green-400 to-blue-500 hover:from-blue-500 hover:to-green-400 text-white font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg"
+                >
+                    Create Order
+                </Link>
             </div>
+            <table className="min-w-full bg-white shadow-lg rounded-lg overflow-hidden border border-gray-300">
+                <thead className="bg-gray-900 text-white uppercase text-sm leading-normal">
+                    <tr>
+                        <th className="py-4 px-6 text-left">Order ID</th>
+                        <th className="py-4 px-6 text-left">Order Date and Time</th>
+                        <th className="py-4 px-6 text-left">Total Amount</th>
+                        <th className="py-4 px-6 text-left">Actions</th>
+                    </tr>
+                </thead>
+                <tbody className="text-gray-800 text-sm font-light">
+                    {orders.map((order) => (
+                        <tr key={order.id} className="border-b border-gray-200 hover:bg-gray-100 transition duration-300 ease-in-out">
+                            <td className="py-4 px-6 text-left">{order.id}</td>
+                            <td className="py-4 px-6 text-left">{new Date(order.orderDateTime).toLocaleString()}</td>
+                            <td className="py-4 px-6 text-left">{order.totalPrice.toFixed(2)}</td>
+                            <td className="py-4 px-6 text-left flex space-x-2">
+                                <button className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-full hover:from-purple-500 hover:to-blue-500 transition duration-300 transform hover:scale-105 shadow-md">
+                                    Edit
+                                </button>
+                                <button className="bg-gradient-to-r from-red-500 to-red-700 text-white px-4 py-2 rounded-full hover:from-red-700 hover:to-red-500 transition duration-300 transform hover:scale-105 shadow-md">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 }
