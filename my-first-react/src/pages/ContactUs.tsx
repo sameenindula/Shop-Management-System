@@ -1,41 +1,26 @@
 
 function ContactUs() {
     return (
-        <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', color: '#333' }}>
-            <h2 style={{ textAlign: 'center', color: '#1e90ff' }}>Get in Touch with Us!</h2>
-
-            <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: '30px' }}>
-                {/* Contact Form */}
-                <div style={{ width: '45%' }}>
-                    <h3>Contact Form</h3>
-                    <form style={{ display: 'flex', flexDirection: 'column' }}>
-                        <label>Name</label>
-                        <input type="text" placeholder="Your Name" style={inputStyle} required />
-
-                        <label>Email</label>
-                        <input type="email" placeholder="Your Email" style={inputStyle} required />
-
-                        <label>Message</label>
-                        <textarea placeholder="Your Message" style={{ ...inputStyle, height: '100px' }} required></textarea>
-
-                        <button type="submit" style={buttonStyle}>Send Message</button>
-                    </form>
-                </div>
-
-                {/* Contact Details */}
-                <div style={{ width: '45%', textAlign: 'center' }}>
-                    <h3>Contact Information</h3>
-                    <p>📍 123 Main St, Anytown, USA</p>
-                    <p>📞 (123) 456-7890</p>
-                    <p>📧 contact@example.com</p>
+        <div className="min-h-screen flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: 'url(https://via.placeholder.com/1920x1080)' }}>
+            <div className="backdrop-blur-lg bg-black bg-opacity-60 p-10 rounded-xl w-11/12 max-w-2xl text-white">
+                <h2 className="text-3xl md:text-4xl font-bold text-center text-cyan-300 mb-8">Get in Touch with Us!</h2>
+                
+                <div className="flex flex-col items-center space-y-6">
+                    {/* Contact Information */}
+                    <div className="text-center">
+                        <h3 className="text-2xl font-semibold mb-4">Contact Information</h3>
+                        <p>📍 University of Moratuwa</p>
+                        <p>📞 (+94) 712345678</p>
+                        <p>📧 sameenindula@gmail.com</p>
+                    </div>
 
                     {/* Social Media Links */}
-                    <div style={{ marginTop: '20px' }}>
-                        <h4>Follow Us</h4>
-                        <div style={{ display: 'flex', justifyContent: 'center', gap: '15px' }}>
-                            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>
-                            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">Twitter</a>
-                            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a>
+                    <div className="mt-6">
+                        <h4 className="text-xl font-semibold mb-4 text-center">Follow Us</h4>
+                        <div className="flex space-x-4 justify-center">
+                            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-cyan-300 hover:text-white transition">Facebook</a>
+                            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-cyan-300 hover:text-white transition">Twitter</a>
+                            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-cyan-300 hover:text-white transition">Instagram</a>
                         </div>
                     </div>
                 </div>
@@ -43,21 +28,5 @@ function ContactUs() {
         </div>
     );
 }
-
-const inputStyle = {
-    padding: '10px',
-    marginBottom: '10px',
-    borderRadius: '5px',
-    border: '1px solid #ccc'
-};
-
-const buttonStyle = {
-    padding: '10px',
-    backgroundColor: '#1e90ff',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer'
-};
 
 export default ContactUs;
