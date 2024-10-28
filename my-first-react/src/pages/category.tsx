@@ -1,19 +1,34 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext";
 import CategoryType from "../type/categoryType";
 
 
 function Category() {
 const [categories, setCategories] = useState<CategoryType[]>([]);
 const [categoryName, setCategoryName] = useState<string>("");
+const {isAuthenticated,jwtToken}=useAuth();
 
-useEffect(() => {
-    loadCategories();
-}, []);
+const config = {
+    headers: {
+        Authorization: `Bearer ${jwtToken}`
+    }
+};
+useEffect(function () {
+
+    if (isAuthenticated) {
+
+        loadCategories();
+    }
+}, [isAuthenticated])
+
+
+
+
 
 async function loadCategories() {
     try {
-    const response = await axios.get("http://localhost:8080/category");
+    const response = await axios.get("http://localhost:8080/category",config);
     setCategories(response.data);
     } catch (error) {
     console.error("Error loading categories:", error);
@@ -31,7 +46,7 @@ async function handleSubmit(event: any) {
 };
 
 try {
-    const response = await axios.post("http://localhost:8080/category", data);
+    const response = await axios.post("http://localhost:8080/category", data,config);
     console.log(response);
     loadCategories();  // Refresh category list after creation
     } catch (error) {

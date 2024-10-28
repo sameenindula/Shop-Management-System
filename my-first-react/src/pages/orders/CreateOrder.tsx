@@ -1,27 +1,42 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import ProductType from "../../type/ProductType";
 
 function CreateOrder() {
+    const {isAuthenticated,jwtToken}=useAuth();
+
     const [products, setProducts] = useState<ProductType[]>([]);
     const [orderProducts, setOrderProducts] = useState<ProductType[]>([]);
     const [total, setTotal] = useState<number>(0);
     const orderRef = useRef<HTMLDivElement | null>(null); // Ref for the order container
 
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${jwtToken}`
+        }
+    };
+
+    useEffect(function () {
+
+        if (isAuthenticated) {
+            loadProducts();
+        }
+    }, [isAuthenticated])
+
+
     // Load products from the API
     async function loadProducts() {
         try {
-            const response = await axios.get("http://localhost:8080/products");
+            const response = await axios.get("http://localhost:8080/products",config);
             setProducts(response.data);
         } catch (error) {
             console.log(error);
         }
     }
 
-    useEffect(() => {
-        loadProducts();
-    }, []);
 
     // Add product to the order and update the total
     function addProductToOrder(product: ProductType) {
@@ -43,11 +58,9 @@ function CreateOrder() {
             productIds.push(product.id);
         })
         try {
-            await axios.post("http://localhost:8080/orders",{
-                productIds:productIds
-            });
+            await axios.post("http://localhost:8080/orders",{productIds:productIds},config);
 
-            navigate("/orders");
+            navigate("/order");
         } catch (error) {
             console.log(error)
         }

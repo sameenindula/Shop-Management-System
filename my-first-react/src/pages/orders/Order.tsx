@@ -1,25 +1,39 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import OrderType from "../../type/OrderType";
 
 
 function Order() {
 
     const [orders,setOrders]= useState<OrderType[]>([]);
+    const {isAuthenticated,jwtToken}=useAuth();
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${jwtToken}`
+        }
+    };
+
+    useEffect(function () {
+
+        if (isAuthenticated) {
+            loadOrders();
+        }
+    }, [isAuthenticated])
+
 
     async function loadOrders(){
         try {
-            const response= await axios.get("http://localhost:8080/orders")
+            const response= await axios.get("http://localhost:8080/orders",config)
             setOrders(response.data);
         } catch (error) {
             console.log(error);
         }
     }
 
-    useEffect(function(){
-        loadOrders();
-    },[])
+    
     return (
         <div className="container mx-auto py-5">
             <h1 className="text-5xl font-bold mb-8 text-center text-gray-700 p-6">Order</h1>

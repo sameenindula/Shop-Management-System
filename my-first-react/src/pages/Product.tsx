@@ -1,9 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext";
 import ProductType from "../type/ProductType";
 import CategoryType from "../type/categoryType";
 
 function Product() {
+
+    const {isAuthenticated,jwtToken}=useAuth();
     const [product, setProduct] = useState<ProductType[]>([]);
     const [ProductName, setProductName] = useState<string>("");
     const [price, setPrice] = useState<number>(0.0);
@@ -13,10 +16,20 @@ function Product() {
     const [productEditing,setProductEditing] = useState<ProductType | null>(null);
     const [productDeleting,setPRoductDeleting]=useState<number>();
 
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${jwtToken}`
+        }
+    };
+    
+    
+
+
     // Loading Categories from the backend
     async function loadCategories() {
         try {
-            const response = await axios.get("http://localhost:8080/category");
+            const response = await axios.get("http://localhost:8080/category",config);
             setCategories(response.data);
         } catch (error) {
             console.error("Error loading categories:", error);
@@ -40,7 +53,7 @@ function Product() {
             categoryId:categoryId
         }
         try {
-            await axios.post("http://localhost:8080/products",data);
+            await axios.post("http://localhost:8080/products",data,config);
             loadProduct();
             setProductName("");
             setPrice(0);
@@ -71,13 +84,14 @@ function Product() {
 
     // Loading Products from the backend
     async function loadProduct() {
-        const response = await axios.get("http://localhost:8080/products");
+        const response = await axios.get("http://localhost:8080/products",config);
         setProduct(response.data);
     }
 
     async function deleteProduct(productId:number){
         try {
-            await axios.delete(`http://localhost:8080/products/${productId}`)
+            await axios.delete(`http://localhost:8080/products/${productId}`,config);
+
             loadProduct();
 
         } catch (error) {
@@ -86,33 +100,38 @@ function Product() {
         }
     }
 
+    
+
     async function updateProduct(){
         const data = {
-            name:ProductName,
-            price:price,
-            description:description,
-            categoryId:categoryId
-        } 
+            name: ProductName,
+            price: price,
+            description: description,
+            categoryId: categoryId
+        }; 
         try {
-            await axios.put("http://localhost:8080/products/"+productEditing?.id,data);
+            await axios.put("http://localhost:8080/products/" + productEditing?.id, data,config);
             setProductEditing(null);
-
-            loadProduct();
-            loadProduct();
+            loadProduct(); // Call it only once here
             setProductName("");
             setPrice(0);
             setDescription("");
             setCategoryId(0);
-            
         } catch (error) {
             console.log(error);
-            
-        }   }
+        }
+    }
+    
 
-    useEffect(() => {
-        loadProduct();
-        loadCategories();
-    }, []);
+        useEffect(function () {
+
+            if (isAuthenticated) {
+                loadProduct();
+                loadCategories();
+            }
+        }, [isAuthenticated])
+        
+        
 
     return (
         <div className="container mx-auto py-5">
